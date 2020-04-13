@@ -728,9 +728,6 @@
     <ClCompile Include="..\..\..\SRC\element\forceBeamColumn\ForceBeamColumnWarping2d.cpp">
       <Filter>forceBeamColumn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\SRC\element\PFEMElement\BackgroundMesh.cpp">
-      <Filter>pfem</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\SRC\element\PFEMElement\LineMesh.cpp">
       <Filter>pfem</Filter>
     </ClCompile>
@@ -889,6 +886,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\SRC\element\mixedBeamColumn\MixedBeamColumn3d.cpp">
       <Filter>mixedBeamColumn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SRC\element\PFEMElement\BackgroundMesh.cpp">
+      <Filter>pfem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\SRC\element\PFEMElement\PFEMContact2D.cpp">
+      <Filter>pfem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1420,9 +1423,6 @@
     <ClInclude Include="..\..\..\SRC\element\forceBeamColumn\ForceBeamColumnWarping2d.h">
       <Filter>forceBeamColumn</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\SRC\element\PFEMElement\BackgroundMesh.h">
-      <Filter>pfem</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\SRC\element\PFEMElement\LineMesh.h">
       <Filter>pfem</Filter>
     </ClInclude>
@@ -1581,6 +1581,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\SRC\element\mixedBeamColumn\MixedBeamColumn3d.h">
       <Filter>mixedBeamColumn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\SRC\element\PFEMElement\BackgroundMesh.h">
+      <Filter>pfem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\SRC\element\PFEMElement\PFEMContact2D.h">
+      <Filter>pfem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

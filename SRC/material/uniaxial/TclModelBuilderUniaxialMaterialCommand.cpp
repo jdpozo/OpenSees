@@ -80,6 +80,7 @@ extern void *OPS_TDConcreteEXP(void); // ntosic
 extern void *OPS_TDConcrete(void); // ntosic
 extern void *OPS_TDConcreteMC10(void); //ntosic
 extern void *OPS_TDConcreteMC10NL(void); //ntosic
+extern void *OPS_Concrete02mod(void); // jd 
 extern void *OPS_ElasticMaterial(void);
 extern void *OPS_ElasticPPMaterial(void);
 extern void *OPS_EPPGapMaterial(void);
@@ -274,6 +275,15 @@ TclModelBuilderUniaxialMaterialCommand (ClientData clientData, Tcl_Interp *inter
 			return TCL_ERROR;
 	}
 
+ //   // jd
+ //   else if (strcmp(argv[1], "Concrete02mod") == 0) {
+ //       void* theMat = OPS_Concrete02mod();
+ //       if (theMat != 0)
+ //           theMaterial = (UniaxialMaterial*)theMat;
+ //       else
+ //           return TCL_ERROR;
+ //   }
+
 	// ntosic
 	else if (strcmp(argv[1], "TDConcreteEXP") == 0) {
 		void *theMat = OPS_TDConcreteEXP();
@@ -379,6 +389,15 @@ TclModelBuilderUniaxialMaterialCommand (ClientData clientData, Tcl_Interp *inter
 	theMaterial = (UniaxialMaterial *)theMat;
       else 
 	return TCL_ERROR;
+      // jd
+    }
+    else if (strcmp(argv[1], "Concrete02mod") == 0) {
+    void* theMat = OPS_Concrete02mod();
+    if (theMat != 0)
+        theMaterial = (UniaxialMaterial*)theMat;
+    else
+        return TCL_ERROR;
+
     } else if (strcmp(argv[1],"Concrete02IS") == 0) {
       void *theMat = OPS_Concrete02IS();
       if (theMat != 0) 

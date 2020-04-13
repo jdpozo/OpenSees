@@ -139,6 +139,7 @@
 #define MAT_TAG_Steel03				23
 #define MAT_TAG_ReinforcingSteel		24
 #define MAT_TAG_Concrete02			25
+#define MAT_TAG_Concrete02mod			250  // jd
 #define MAT_TAG_Steel02				26
 #define MAT_TAG_Bond_SP01                       27
 #define MAT_TAG_Hysteretic2			28
