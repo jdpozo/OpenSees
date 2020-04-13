@@ -45,7 +45,7 @@
 class Concrete02mod : public UniaxialMaterial
 {
   public:
-    Concrete02mod(int tag, double _fc, double _epsc0, double _fcu,
+    Concrete02mod(int tag, double _fc, double _epsc0, double _ec0, double _fcu,
 	     double _epscu, double _rat, double _ft, double _Ets);
 
     Concrete02mod(void);
@@ -82,11 +82,12 @@ class Concrete02mod : public UniaxialMaterial
     // matpar : Concrete FIXED PROPERTIES
     double fc;    // concrete compression strength           : mp(1)
     double epsc0; // strain at compression strength          : mp(2)
-    double fcu;   // stress at ultimate (crushing) strain    : mp(3)
-    double epscu; // ultimate (crushing) strain              : mp(4)       
-    double rat;   // ratio between unloading slope at epscu and original slope : mp(5)
-    double ft;    // concrete tensile strength               : mp(6)
-    double Ets;   // tension stiffening slope                : mp(7)
+	double ec0;   // initial stiffness                       : mp(3)
+    double fcu;   // stress at ultimate (crushing) strain    : mp(4)
+    double epscu; // ultimate (crushing) strain              : mp(5)       
+    double rat;   // ratio between unloading slope at epscu and original slope : mp(6)
+    double ft;    // concrete tensile strength               : mp(7)
+    double Ets;   // tension stiffening slope                : mp(8)
 
     // hstvP : Concerete HISTORY VARIABLES last committed step
     double ecminP;  //  hstP(1)

@@ -56,7 +56,7 @@ OPS_Concrete02mod()
   UniaxialMaterial *theMaterial = 0;
 
   int    iData[1];
-  double dData[7];
+  double dData[8];  //jd
   int numData = 1;
 
   if (OPS_GetIntInput(&numData, iData) != 0) {
@@ -66,7 +66,8 @@ OPS_Concrete02mod()
 
   numData = OPS_GetNumRemainingInputArgs();
 
-  if (numData != 7) {
+//jd 
+  if (numData != 8) {
     opserr << "Invalid #args, want: uniaxialMaterial Concrete02mod " << iData[0] << "fpc? epsc0? fpcu? epscu? rat? ft? Ets?\n";
     return 0;
   }
@@ -78,7 +79,7 @@ OPS_Concrete02mod()
 
 
   // Parsing was successful, allocate the material
-  theMaterial = new Concrete02mod(iData[0], dData[0], dData[1], dData[2], dData[3], dData[4], dData[5], dData[6]);
+  theMaterial = new Concrete02mod(iData[0], dData[0], dData[1], dData[2], dData[3], dData[4], dData[5], dData[6], dData[7]); //jd
   
   if (theMaterial == 0) {
     opserr << "WARNING could not create uniaxialMaterial of type Concrete02mod Material\n";
@@ -88,20 +89,20 @@ OPS_Concrete02mod()
   return theMaterial;
 }
 
-Concrete02mod::Concrete02mod(int tag, double _fc, double _epsc0, double _fcu,
+Concrete02mod::Concrete02mod(int tag, double _fc, double _epsc0, double _ec0, double _fcu,
 		       double _epscu, double _rat, double _ft, double _Ets):
   UniaxialMaterial(tag, MAT_TAG_Concrete02mod),
-  fc(_fc), epsc0(_epsc0), fcu(_fcu), epscu(_epscu), rat(_rat), ft(_ft), Ets(_Ets)
+  fc(_fc), epsc0(_epsc0), ec0(_ec0), fcu(_fcu), epscu(_epscu), rat(_rat), ft(_ft), Ets(_Ets)
 {
   ecminP = 0.0;
   deptP = 0.0;
 
-  eP = 2.0*fc/epsc0;
+  eP = ec0;
   epsP = 0.0;
   sigP = 0.0;
   eps = 0.0;
   sig = 0.0;
-  e = 2.0*fc/epsc0;
+  e = ec0;
 }
 
 Concrete02mod::Concrete02mod(void):
@@ -118,7 +119,7 @@ Concrete02mod::~Concrete02mod(void)
 UniaxialMaterial*
 Concrete02mod::getCopy(void)
 {
-  Concrete02mod *theCopy = new Concrete02mod(this->getTag(), fc, epsc0, fcu, epscu, rat, ft, Ets);
+  Concrete02mod *theCopy = new Concrete02mod(this->getTag(), fc, epsc0, ec0, fcu, epscu, rat, ft, Ets);
   
   return theCopy;
 }
@@ -126,13 +127,13 @@ Concrete02mod::getCopy(void)
 double
 Concrete02mod::getInitialTangent(void)
 {
-  return 2.0*fc/epsc0;
+  return ec0;
 }
 
 int
 Concrete02mod::setTrialStrain(double trialStrain, double strainRate)
 {
-  double  ec0 = fc * 2. / epsc0;
+  // double  ec0 = fc * 2. / epsc0; jd
 
   // retrieve concrete hitory variables
 
@@ -280,12 +281,12 @@ Concrete02mod::revertToStart(void)
   ecminP = 0.0;
   deptP = 0.0;
 
-  eP = 2.0*fc/epsc0;
+  eP = ec0;
   epsP = 0.0;
   sigP = 0.0;
   eps = 0.0;
   sig = 0.0;
-  e = 2.0*fc/epsc0;
+  e = ec0;
 
   return 0;
 }
@@ -293,20 +294,21 @@ Concrete02mod::revertToStart(void)
 int 
 Concrete02mod::sendSelf(int commitTag, Channel &theChannel)
 {
-  static Vector data(13);
+  static Vector data(14);
   data(0) =fc;    
   data(1) =epsc0; 
-  data(2) =fcu;   
-  data(3) =epscu; 
-  data(4) =rat;   
-  data(5) =ft;    
-  data(6) =Ets;   
-  data(7) =ecminP;
-  data(8) =deptP; 
-  data(9) =epsP;  
-  data(10) =sigP; 
-  data(11) =eP;   
-  data(12) = this->getTag();
+  data(2) =ec0; 
+  data(3) =fcu;   
+  data(4) =epscu; 
+  data(5) =rat;   
+  data(6) =ft;    
+  data(7) =Ets;   
+  data(8) =ecminP;
+  data(9) =deptP; 
+  data(10) =epsP;  
+  data(11) =sigP; 
+  data(12) =eP;   
+  data(13) = this->getTag();
 
   if (theChannel.sendVector(this->getDbTag(), commitTag, data) < 0) {
     opserr << "Concrete02mod::sendSelf() - failed to sendSelf\n";
@@ -320,7 +322,7 @@ Concrete02mod::recvSelf(int commitTag, Channel &theChannel,
 	     FEM_ObjectBroker &theBroker)
 {
 
-  static Vector data(13);
+  static Vector data(14);
 
   if (theChannel.recvVector(this->getDbTag(), commitTag, data) < 0) {
     opserr << "Concrete02mod::recvSelf() - failed to recvSelf\n";
@@ -329,17 +331,18 @@ Concrete02mod::recvSelf(int commitTag, Channel &theChannel,
 
   fc = data(0);
   epsc0 = data(1);
-  fcu = data(2);
-  epscu = data(3);
-  rat = data(4);
-  ft = data(5);
-  Ets = data(6);
-  ecminP = data(7);
-  deptP = data(8);
-  epsP = data(9);
-  sigP = data(10);
-  eP = data(11);
-  this->setTag(data(12));
+  ec0 = data(2);
+  fcu = data(3);
+  epscu = data(4);
+  rat = data(5);
+  ft = data(6);
+  Ets = data(7);
+  ecminP = data(8);
+  deptP = data(9);
+  epsP = data(10);
+  sigP = data(11);
+  eP = data(12);
+  this->setTag(data(13));
 
   e = eP;
   sig = sigP;
@@ -359,7 +362,7 @@ Concrete02mod::Print(OPS_Stream &s, int flag)
     s << "\t\t\t{";
 	s << "\"name\": \"" << this->getTag() << "\", ";
 	s << "\"type\": \"Concrete02mod\", ";
-	s << "\"Ec\": " << 2.0*fc/epsc0 << ", ";
+	s << "\"Ec\": " << ec0 << ", ";
 	s << "\"fc\": " << fc << ", ";
     s << "\"epsc\": " << epsc0 << ", ";
     s << "\"fcu\": " << fcu << ", ";
@@ -387,7 +390,7 @@ Concrete02mod::Tens_Envlp (double epsc, double &sigc, double &Ect)
 !    Ect  = tangent concrete modulus
 !-----------------------------------------------------------------------*/
   
-  double Ec0  = 2.0*fc/epsc0;
+  double Ec0  = ec0;
 
   double eps0 = ft/Ec0;
   double epsu = ft*(1.0/Ets+1.0/Ec0);
@@ -426,12 +429,14 @@ Concrete02mod::Compr_Envlp (double epsc, double &sigc, double &Ect)
 !   Ect   = tangent concrete modulus
 -----------------------------------------------------------------------*/
 
-  double Ec0  = 4.0*fc/epsc0; //jd
+  double Ec0  = ec0;
 
-  double ratLocal = epsc/epsc0;
+  double x = epsc/epsc0;
+  double Esec = fc/epsc0;
+  double r = Ec0 / (Ec0-Esec);
   if (epsc>=epsc0) {
-    sigc = 2*fc*ratLocal*(2.0-ratLocal); //jd
-    Ect  = Ec0*(1.0-ratLocal);
+    sigc = (fc*r*x)/(r-1.0+pow(x,r));
+    Ect  = Esec*(r*(1.0-r)*(pow(x,r)-1.0))/pow((r-1.0+pow(x,r)),2.0);
   } else {
     
     //   linear descending branch between epsc0 and epscu
